@@ -33,8 +33,9 @@ script:
   - GOOS=js GOARCH=wasm golangci-lint run --build-tags 'js wasm' . ./elem/... ./event/... ./example/...
   - GOOS=js GOARCH=wasm golangci-lint run --build-tags 'js wasm' --exclude 'exported .* should have comment .*or be unexported' ./prop/... ./style/... # https://github.com/gopherjs/vecty/issues/227
 
-  # Test with Go compiler and GopherJS compiler.
+  # Test with Go compiler (under amd64 and wasm architectures) and GopherJS compiler.
   - go test -v -race ./...
+  - GOOS=js GOARCH=wasm go test -exec="$(go env GOROOT)/misc/wasm/go_js_wasm_exec" ./... # https://github.com/golang/go/wiki/WebAssembly#executing-webassembly-with-nodejs
   - gopherjs test -v ./...
 
   # Generate and upload coverage to codecov.io
